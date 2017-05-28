@@ -135,9 +135,9 @@ class Net(nn.Module):
         return F.log_softmax(x), F.softmax(x)
 
 
-model = Net()
-if args.cuda:
-    model.cuda()
+model = Net().cuda()
+# if args.cuda:
+#     model.cuda()
 
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
