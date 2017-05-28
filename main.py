@@ -136,8 +136,8 @@ class Net(nn.Module):
 
 
 model = Net().cuda()
-# if args.cuda:
-#     model.cuda()
+if args.cuda:
+    model.cuda()
 
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
@@ -166,6 +166,8 @@ def test(epoch):
     test_loss = 0
     correct = 0
     for data, target, paths in test_loader:
+        if args.cuda:
+            data, target = data.cuda(), target.cuda()
         data, target = Variable(data, volatile=True), Variable(target)
         output, probvec = model(data)
         test_loss += F.nll_loss(output, target).data[0]
@@ -186,6 +188,8 @@ def kaggle_test():
     first_line = "id,class_000,class_001,class_002,class_003,class_004,class_005,class_006,class_007,class_008,class_009,class_010,class_011,class_012,class_013,class_014,class_015,class_016,class_017,class_018,class_019,class_020,class_021,class_022,class_023,class_024,class_025,class_026,class_027,class_028,class_029,class_030,class_031,class_032,class_033,class_034,class_035,class_036,class_037,class_038,class_039,class_040,class_041,class_042,class_043,class_044,class_045,class_046,class_047,class_048,class_049,class_050,class_051,class_052,class_053,class_054,class_055,class_056,class_057,class_058,class_059,class_060,class_061,class_062,class_063,class_064,class_065,class_066,class_067,class_068,class_069,class_070,class_071,class_072,class_073,class_074,class_075,class_076,class_077,class_078,class_079,class_080,class_081,class_082,class_083,class_084,class_085,class_086,class_087,class_088,class_089,class_090,class_091,class_092,class_093,class_094,class_095,class_096,class_097,class_098,class_099\n"
     evalfile.write(first_line)
     for data, paths in kaggle_loader:
+        if args.cuda:
+            data = data.cuda()
         data = Variable(data, volatile=True)
         output, probvecs = model(data)
         probvecs = probvecs.data.numpy()
