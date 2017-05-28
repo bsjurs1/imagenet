@@ -136,8 +136,8 @@ class Net(nn.Module):
 
 
 model = Net().cuda()
-if args.cuda:
-    model.cuda()
+# if args.cuda:
+#     model.cuda()
 
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
