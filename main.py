@@ -56,11 +56,11 @@ transform = transforms.Compose([
 trainSet = ImageNet('imagenet56x56_release', transform, None, True, False)
 train_loader = torch.utils.data.DataLoader(trainSet,
                                            batch_size=args.batch_size,
-                                           shuffle=False, **kwargs)
+                                           shuffle=True, **kwargs)
 
 testSet = ImageNet('imagenet56x56_release', transform, None, False, False)
 test_loader = torch.utils.data.DataLoader(testSet, batch_size=args.batch_size,
-                                          shuffle=False, **kwargs)
+                                          shuffle=True, **kwargs)
 
 kaggleSet = ImageNet('imagenet56x56_release', transform, None, False, True)
 kaggle_loader = torch.utils.data.DataLoader(kaggleSet,
