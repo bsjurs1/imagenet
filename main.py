@@ -14,12 +14,12 @@ from ImageNet import ImageNet
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Example')
-parser.add_argument('--batch-size', type=int, default=256, metavar='N',
-                    help='input batch size for training (default: 256)')
-parser.add_argument('--test-batch-size', type=int, default=256, metavar='N',
-                    help='input batch size for testing (default: 256)')
+parser.add_argument('--batch-size', type=int, default=128, metavar='N',
+                    help='input batch size for training (default: 128)')
+parser.add_argument('--test-batch-size', type=int, default=128, metavar='N',
+                    help='input batch size for testing (default: 128)')
 parser.add_argument('--epochs', type=int, default=128, metavar='N',
-                    help='number of epochs to train (default: 100)')
+                    help='number of epochs to train (default: 128)')
 parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
                     help='learning rate (default: 0.01)')
 parser.add_argument('--momentum', type=float, default=0.9, metavar='M',
@@ -82,16 +82,9 @@ class Net(nn.Module):
         self.conv6 = nn.Conv2d(256, 512, kernel_size=3)
         self.conv7 = nn.Conv2d(512, 512, kernel_size=3)
         self.conv8 = nn.Conv2d(512, 512, kernel_size=3)
-        self.fc1 = nn.Linear(512, 512)
+        self.fc1 = nn.Linear(2048, 512)
         self.fc2 = nn.Linear(512, 512)
         self.fc3 = nn.Linear(512, 100)
-
-        # self.conv1 = nn.Conv2d(3, 10, kernel_size=5)
-        # self.conv2 = nn.Conv2d(10, 20, kernel_size=5)
-        # self.conv3 = nn.Conv2d(20, 30, kernel_size=3)
-        # self.conv2_drop = nn.Dropout2d()
-        # self.fc1 = nn.Linear(2430, 200)
-        # self.fc2 = nn.Linear(200, 100)
 
     def forward(self, x):
         """Perform the classification."""
@@ -101,8 +94,6 @@ class Net(nn.Module):
         x = F.relu(self.conv2(x))
         x = F.dropout(x, training=self.training)
         # print(x.size())
-        x = F.max_pool2d(x, 2)
-        x = F.dropout(x, training=self.training)
         # print(x.size())
         x = F.relu(self.conv3(x))
         x = F.dropout(x, training=self.training)
@@ -127,7 +118,7 @@ class Net(nn.Module):
         # print(x.size())
         x = F.max_pool2d(x, 3)
         # print(x.size())
-        x = x.view(-1, 512)
+        x = x.view(-1, 2048)
         # print(x.size())
         x = self.fc1(x)
         # print(x.size())
@@ -210,7 +201,7 @@ def kaggle_test():
     evalfile.close()
 
 
-for epoch in range(1, 11):
+for epoch in range(1, args.epochs):
     train(epoch)
     if epoch == args.epochs:
         addit = True
