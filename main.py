@@ -75,8 +75,8 @@ class Net(nn.Module):
         """Initialize the CNN."""
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3)
-        self.conv2 = nn.Conv2d(64, 128, kernel_size=3)
-        self.conv3 = nn.Conv2d(128, 128, kernel_size=3)
+        self.conv2 = nn.Conv2d(64, 64, kernel_size=3)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3)
         self.conv4 = nn.Conv2d(128, 128, kernel_size=3)
         self.conv5 = nn.Conv2d(128, 128, kernel_size=3)
         self.conv6 = nn.Conv2d(128, 256, kernel_size=3)
