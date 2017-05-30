@@ -77,8 +77,9 @@ class Net(nn.Module):
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3)
         self.conv2 = nn.Conv2d(64, 128, kernel_size=3)
         self.conv3 = nn.Conv2d(128, 256, kernel_size=3)
-        self.conv4 = nn.Conv2d(256, 512, kernel_size=3)
-        self.conv5 = nn.Conv2d(512, 1024, kernel_size=3)
+        self.conv4 = nn.Conv2d(256, 256, kernel_size=3)
+        self.conv5 = nn.Conv2d(256, 512, kernel_size=3)
+        self.conv6 = nn.Conv2d(512, 1024, kernel_size=3)
         self.fc1 = nn.Linear(1024, 1024)
         self.fc2 = nn.Linear(1024, 512)
         self.fc3 = nn.Linear(512, 100)
@@ -93,10 +94,11 @@ class Net(nn.Module):
         x = F.dropout(x, training=self.training)
         x = F.max_pool2d(x, 2)  # 12
         x = F.relu(self.conv4(x))  # 10
+        x = F.relu(self.conv5(x))  # 8
         x = F.dropout(x, training=self.training)
-        x = F.max_pool2d(x, 2)  # 5
-        x = F.relu(self.conv5(x)) # 3
-        x = F.max_pool2d(x, 3) # 1
+        x = F.max_pool2d(x, 2)  # 4
+        x = F.relu(self.conv6(x))  # 2
+        x = F.max_pool2d(x, 2)  # 1
         x = x.view(-1, 1024)
         x = self.fc1(x)
         x = self.fc2(x)
