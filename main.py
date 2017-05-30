@@ -102,9 +102,19 @@ class Net(nn.Module):
         return F.log_softmax(x), F.softmax(x)
 
 
+def weight_init(m):
+    """Perform weight init."""
+    if isinstance(m, nn.Linear):
+        size = m.weight.size()
+        fan_out = size[0]  # number of rows
+        fan_in = size[1]  # number of columns
+        variance = np.sqrt(2.0 / (fan_in + fan_out))
+        m.weight.data.normal_(0.0, variance)
+
 model = Net()
 if args.cuda:
     model.cuda()
+model.apply(weight_init)
 
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
@@ -175,6 +185,6 @@ def kaggle_test():
 
 for epoch in range(1, args.epochs):
     train(epoch)
-    if(epoch%3 == 0):
+    if(epoch % 3 == 0 and epoch != 0):
         kaggle_test()
     test(epoch)
