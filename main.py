@@ -74,37 +74,27 @@ class Net(nn.Module):
     def __init__(self):
         """Initialize the CNN."""
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3)
-        self.conv2 = nn.Conv2d(64, 128, kernel_size=3)
-        self.conv3 = nn.Conv2d(128, 256, kernel_size=3)
-        self.conv4 = nn.Conv2d(256, 256, kernel_size=3)
-        self.conv5 = nn.Conv2d(256, 256, kernel_size=3)
-        self.conv6 = nn.Conv2d(256, 512, kernel_size=3)
-        self.conv7 = nn.Conv2d(512, 1024, kernel_size=3)
-        self.conv8 = nn.Conv2d(1024, 1024, kernel_size=3)
-        self.conv9 = nn.Conv2d(1024, 2048, kernel_size=3)
-        self.fc1 = nn.Linear(2048, 2048)
-        self.fc2 = nn.Linear(2048, 2048)
-        self.fc3 = nn.Linear(2048, 100)
+        self.conv1 = nn.Conv2d(3, 128, kernel_size=3)
+        self.conv2 = nn.Conv2d(128, 256, kernel_size=3)
+        self.conv3 = nn.Conv2d(256, 512, kernel_size=3)
+        self.conv4 = nn.Conv2d(512, 512, kernel_size=3)
+        self.fc1 = nn.Linear(512, 512)
+        self.fc2 = nn.Linear(512, 512)
+        self.fc3 = nn.Linear(512, 100)
 
     def forward(self, x):
         """Perform the classification."""
-        x = F.relu(self.conv1(x))  # 54
-        x = F.relu(self.conv2(x))  # 52
-        x = F.max_pool2d(x, 2)  # 26
+        x = F.relu(self.conv1(x))
+        x = F.max_pool2d(x, 2)
+        x = F.relu(self.conv2(x))
         x = F.dropout(x, training=self.training)
-        x = F.relu(self.conv3(x)) # 24
-        x = F.relu(self.conv4(x)) # 22
-        x = F.relu(self.conv5(x)) # 20
-        x = F.max_pool2d(x, 2)  # 10
+        x = F.max_pool2d(x, 2)
+        x = F.relu(self.conv3(x))
         x = F.dropout(x, training=self.training)
-        x = F.relu(self.conv6(x)) # 8
-        x = F.relu(self.conv7(x)) # 6
-        x = F.relu(self.conv8(x)) # 4
-        x = F.relu(self.conv9(x)) # 2
-        x = F.max_pool2d(x, 2) # 1
-        # x = F.max_pool2d(x, 2)
-        x = x.view(-1, 2048)
+        x = F.max_pool2d(x, 2)
+        x = F.relu(self.conv4(x))
+        x = F.max_pool2d(x, 3)
+        x = x.view(-1, 512)
         x = self.fc1(x)
         x = self.fc2(x)
         x = self.fc3(x)
