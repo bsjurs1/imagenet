@@ -20,8 +20,8 @@ parser.add_argument('--test-batch-size', type=int, default=64, metavar='N',
                     help='input batch size for testing (default: 64)')
 parser.add_argument('--epochs', type=int, default=128, metavar='N',
                     help='number of epochs to train (default: 128)')
-parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
-                    help='learning rate (default: 0.01)')
+parser.add_argument('--lr', type=float, default=1.0, metavar='LR',
+                    help='learning rate (default: 1.0)')
 parser.add_argument('--momentum', type=float, default=0.9, metavar='M',
                     help='SGD momentum (default: 0.9)')
 parser.add_argument('--no-cuda', action='store_true', default=False,
@@ -94,13 +94,13 @@ class Net(nn.Module):
         # 56
         x = F.relu(self.conv1(x))  # 54
         x = F.relu(self.conv2(x))  # 52
-        # x = F.dropout(x, training=self.training)
+        x = F.dropout(x, training=self.training)
         x = F.relu(self.conv3(x))  # 50
         x = F.relu(self.conv4(x))  # 48
         x = F.max_pool2d(x, 2)  # 24
         x = F.relu(self.conv5(x))  # 22
         x = F.relu(self.conv6(x))  # 20
-        # x = F.dropout(x, training=self.training)
+        x = F.dropout(x, training=self.training)
         x = F.relu(self.conv7(x))  # 18
         x = F.relu(self.conv8(x))  # 16
         x = F.max_pool2d(x, 2)  # 8
@@ -186,9 +186,9 @@ def kaggle_test():
             evalfile.write(line)
     evalfile.close()
 
-
 for epoch in range(1, args.epochs):
     train(epoch)
+    args.lr -= 0.05
     if epoch == args.epochs:
         addit = True
     test(epoch)
