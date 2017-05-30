@@ -74,12 +74,17 @@ class Net(nn.Module):
     def __init__(self):
         """Initialize the CNN."""
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 32, kernel_size=3)
-        self.conv2 = nn.Conv2d(32, 32, kernel_size=3)
-        self.conv3 = nn.Conv2d(32, 32, kernel_size=3)
-        self.conv4 = nn.Conv2d(32, 64, kernel_size=3)
-        self.conv5 = nn.Conv2d(64, 64, kernel_size=3)
-        self.conv6 = nn.Conv2d(64, 128, kernel_size=3)
+        self.conv1 = nn.Conv2d(3, 16, kernel_size=3)
+        self.conv2 = nn.Conv2d(16, 16, kernel_size=3)
+        self.conv3 = nn.Conv2d(16, 16, kernel_size=3)
+        self.conv4 = nn.Conv2d(16, 32, kernel_size=3)
+        self.conv5 = nn.Conv2d(32, 32, kernel_size=3)
+        self.conv6 = nn.Conv2d(32, 32, kernel_size=3)
+        self.conv7 = nn.Conv2d(32, 64, kernel_size=3)
+        self.conv8 = nn.Conv2d(64, 64, kernel_size=3)
+        self.conv9 = nn.Conv2d(64, 64, kernel_size=3)
+        self.conv10 = nn.Conv2d(64, 128, kernel_size=3)
+        self.conv11 = nn.Conv2d(128, 128, kernel_size=3)
         self.fc1 = nn.Linear(128, 256)
         self.fc2 = nn.Linear(256, 256)
         self.fc3 = nn.Linear(256, 100)
@@ -89,16 +94,21 @@ class Net(nn.Module):
         # 56
         x = F.relu(self.conv1(x))  # 54
         x = F.relu(self.conv2(x))  # 52
-        x = F.max_pool2d(x, 2)  # 26
-        x = F.relu(self.conv3(x))  # 24
         x = F.dropout(x, training=self.training)
-        x = F.max_pool2d(x, 2)  # 12
-        x = F.relu(self.conv4(x))  # 10
-        x = F.relu(self.conv5(x))  # 8
+        x = F.relu(self.conv3(x))  # 50
+        x = F.relu(self.conv4(x))  # 48
+        x = F.max_pool2d(x, 2)  # 24
+        x = F.relu(self.conv5(x))  # 22
+        x = F.relu(self.conv6(x))  # 20
         x = F.dropout(x, training=self.training)
-        x = F.max_pool2d(x, 2)  # 4
-        x = F.relu(self.conv6(x))  # 2
-        x = F.max_pool2d(x, 2)  # 1
+        x = F.relu(self.conv7(x))  # 18
+        x = F.relu(self.conv8(x))  # 16
+        x = F.max_pool2d(x, 2)  # 8
+        x = F.relu(self.conv9(x))  # 6
+        x = F.relu(self.conv10(x))  # 4
+        x = F.dropout(x, training=self.training)
+        x = F.relu(self.conv11(x))  # 2
+        x = F.max_pool2d(x, 2)
         x = x.view(-1, 128)
         x = self.fc1(x)
         x = self.fc2(x)
