@@ -20,8 +20,8 @@ parser.add_argument('--test-batch-size', type=int, default=64, metavar='N',
                     help='input batch size for testing (default: 64)')
 parser.add_argument('--epochs', type=int, default=128, metavar='N',
                     help='number of epochs to train (default: 128)')
-parser.add_argument('--lr', type=float, default=1.0, metavar='LR',
-                    help='learning rate (default: 1.0)')
+parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
+                    help='learning rate (default: 0.01)')
 parser.add_argument('--momentum', type=float, default=0.9, metavar='M',
                     help='SGD momentum (default: 0.9)')
 parser.add_argument('--no-cuda', action='store_true', default=False,
@@ -74,20 +74,20 @@ class Net(nn.Module):
     def __init__(self):
         """Initialize the CNN."""
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3)
-        self.conv2 = nn.Conv2d(64, 64, kernel_size=3)
-        self.conv3 = nn.Conv2d(64, 64, kernel_size=3)
-        self.conv4 = nn.Conv2d(64, 128, kernel_size=3)
-        self.conv5 = nn.Conv2d(128, 128, kernel_size=3)
-        self.conv6 = nn.Conv2d(128, 128, kernel_size=3)
-        self.conv7 = nn.Conv2d(128, 256, kernel_size=3)
-        self.conv8 = nn.Conv2d(256, 256, kernel_size=3)
-        self.conv9 = nn.Conv2d(256, 256, kernel_size=3)
-        self.conv10 = nn.Conv2d(256, 512, kernel_size=3)
-        self.conv11 = nn.Conv2d(512, 512, kernel_size=3)
-        self.fc1 = nn.Linear(512, 512)
-        self.fc2 = nn.Linear(512, 512)
-        self.fc3 = nn.Linear(512, 100)
+        self.conv1 = nn.Conv2d(3, 16, kernel_size=3)
+        self.conv2 = nn.Conv2d(16, 16, kernel_size=3)
+        self.conv3 = nn.Conv2d(16, 16, kernel_size=3)
+        self.conv4 = nn.Conv2d(16, 32, kernel_size=3)
+        self.conv5 = nn.Conv2d(32, 32, kernel_size=3)
+        self.conv6 = nn.Conv2d(32, 32, kernel_size=3)
+        self.conv7 = nn.Conv2d(32, 64, kernel_size=3)
+        self.conv8 = nn.Conv2d(64, 64, kernel_size=3)
+        self.conv9 = nn.Conv2d(64, 64, kernel_size=3)
+        self.conv10 = nn.Conv2d(64, 128, kernel_size=3)
+        self.conv11 = nn.Conv2d(128, 128, kernel_size=3)
+        self.fc1 = nn.Linear(128, 128)
+        self.fc2 = nn.Linear(128, 128)
+        self.fc3 = nn.Linear(128, 100)
 
     def forward(self, x):
         """Perform the classification."""
@@ -108,7 +108,7 @@ class Net(nn.Module):
         x = F.relu(self.conv10(x))  # 4
         x = F.relu(self.conv11(x))  # 2
         x = F.max_pool2d(x, 2)
-        x = x.view(-1, 512)
+        x = x.view(-1, 128)
         x = self.fc1(x)
         x = self.fc2(x)
         x = self.fc3(x)
@@ -186,9 +186,10 @@ def kaggle_test():
             evalfile.write(line)
     evalfile.close()
 
+
 for epoch in range(1, args.epochs):
     train(epoch)
-    args.lr -= 0.05
+    args.lr -= 0.001
     if epoch == args.epochs:
         addit = True
     test(epoch)
