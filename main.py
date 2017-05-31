@@ -14,10 +14,10 @@ from ImageNet import ImageNet
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Example')
-parser.add_argument('--batch-size', type=int, default=64, metavar='N',
-                    help='input batch size for training (default: 64)')
-parser.add_argument('--test-batch-size', type=int, default=64, metavar='N',
-                    help='input batch size for testing (default: 64)')
+parser.add_argument('--batch-size', type=int, default=16, metavar='N',
+                    help='input batch size for training (default: 16)')
+parser.add_argument('--test-batch-size', type=int, default=16, metavar='N',
+                    help='input batch size for testing (default: 16)')
 parser.add_argument('--epochs', type=int, default=128, metavar='N',
                     help='number of epochs to train (default: 128)')
 parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
@@ -74,39 +74,34 @@ class Net(nn.Module):
     def __init__(self):
         """Initialize the CNN."""
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3)  # 54
-        self.conv2 = nn.Conv2d(64, 256, kernel_size=3)  # 25
-        self.conv3 = nn.Conv2d(256, 1024, kernel_size=3)  # 10
-        self.conv4 = nn.Conv2d(1024, 8192, kernel_size=3)  # 3
-        self.fc1 = nn.Linear(8192, 4096)
-        self.fc2 = nn.Linear(4096, 1024)
-        self.fc3 = nn.Linear(1024, 100)
+        self.conv1 = nn.Conv2d(3, 256, kernel_size=3)  # 54
+        self.conv2 = nn.Conv2d(256, 256, kernel_size=3)  # 52
+        self.conv3 = nn.Conv2d(256, 512, kernel_size=3)  # 19
+        self.conv4 = nn.Conv2d(512, 512, kernel_size=3)  # 17
+        self.conv5 = nn.Conv2d(512, 4096, kernel_size=3)  # 6
+        self.conv6 = nn.Conv2d(4096, 4096, kernel_size=3)  # 4
+        self.fc1 = nn.Linear(4096, 4096)
+        self.fc2 = nn.Linear(4096, 100)
+
 
     def forward(self, x):
         """Perform the classification."""
+
         x = F.relu(self.conv1(x))  # 54
-
-        x = F.max_pool2d(x, 2) # 27
-
-        x = F.relu(self.conv2(x))  # 25
+        x = F.relu(self.conv2(x))  # 52
+        x = F.max_pool2d(x, 2) # 21
+        x = F.relu(self.conv3(x))  # 19
         x = F.dropout(x, training=self.training)
-
-        x = F.max_pool2d(x, 2) # 12
-
-        x = F.relu(self.conv3(x))  # 10
+        x = F.relu(self.conv4(x))  # 17
+        x = F.max_pool2d(x, 2) # 8
+        x = F.relu(self.conv5(x))  # 6
         x = F.dropout(x, training=self.training)
-
-        x = F.max_pool2d(x, 2) # 5
-
-        x = F.relu(self.conv4(x)) # 3
-
-        x = F.max_pool2d(x, 3)
-
-        x = x.view(-1, 8192)
+        x = F.relu(self.conv6(x))  # 4
+        x = F.max_pool2d(x, 2) # 2
+        x = F.max_pool2d(x, 2) # 1
+        x = x.view(-1, 4096)
         x = self.fc1(x)
         x = self.fc2(x)
-        x = self.fc3(x)
-
         return F.log_softmax(x), F.softmax(x)
 
 
