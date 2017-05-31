@@ -78,33 +78,36 @@ class Net(nn.Module):
         self.conv2 = nn.Conv2d(64, 64, kernel_size=3)
         self.conv3 = nn.Conv2d(64, 256, kernel_size=3)
         self.conv4 = nn.Conv2d(256, 256, kernel_size=3)
-        self.conv5 = nn.Conv2d(256, 512, kernel_size=3)
-        self.conv6 = nn.Conv2d(512, 512, kernel_size=3)
-        self.conv7 = nn.Conv2d(512, 1024, kernel_size=3)
-        self.fc1 = nn.Linear(1024, 1024)
-        self.fc2 = nn.Linear(1024, 1024)
-        self.fc3 = nn.Linear(1024, 100)
+        self.conv5 = nn.Conv2d(256, 1024, kernel_size=3)
+        self.conv6 = nn.Conv2d(1024, 1024, kernel_size=3)
+        self.conv7 = nn.Conv2d(1024, 2048, kernel_size=3)
+        self.fc1 = nn.Linear(2048, 2048)
+        self.fc2 = nn.Linear(2048, 2048)
+        self.fc3 = nn.Linear(2048, 100)
 
     def forward(self, x):
         """Perform the classification."""
         x = F.relu(self.conv1(x))  # 54
+        x = F.dropout(x, training=self.training)
         x = F.relu(self.conv2(x))  # 52
 
         x = F.max_pool2d(x, 2)  # 26
 
         x = F.relu(self.conv3(x))  # 24
+        x = F.dropout(x, training=self.training)
         x = F.relu(self.conv4(x))  # 22
 
         x = F.max_pool2d(x, 2)  # 11
 
         x = F.relu(self.conv5(x))  # 9
+        x = F.dropout(x, training=self.training)
         x = F.relu(self.conv6(x))  # 7
 
         x = F.max_pool2d(x, 2)  # 3
 
         x = F.relu(self.conv7(x))  # 1
 
-        x = x.view(-1, 1024)
+        x = x.view(-1, 2048)
 
         x = self.fc1(x)
         x = self.fc2(x)
