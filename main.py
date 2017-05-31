@@ -74,17 +74,18 @@ class Net(nn.Module):
     def __init__(self):
         """Initialize the CNN."""
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 256, kernel_size=3)
-        self.conv2 = nn.Conv2d(256, 512, kernel_size=3)
-        self.conv3 = nn.Conv2d(512, 1024, kernel_size=3)
-        self.conv4 = nn.Conv2d(1024, 1024, kernel_size=3)
-        self.fc1 = nn.Linear(1024, 1024)
-        self.fc2 = nn.Linear(1024, 1024)
+        self.conv1 = nn.Conv2d(3, 32, kernel_size=3)
+        self.conv2 = nn.Conv2d(32, 128, kernel_size=3)
+        self.conv3 = nn.Conv2d(128, 512, kernel_size=3)
+        self.conv4 = nn.Conv2d(512, 4096, kernel_size=3)
+        self.fc1 = nn.Linear(4096, 4096)
+        self.fc2 = nn.Linear(4096, 1024)
         self.fc3 = nn.Linear(1024, 100)
 
     def forward(self, x):
         """Perform the classification."""
         x = F.relu(self.conv1(x)) # 54
+        x = F.dropout(x, training=self.training)
         x = F.max_pool2d(x, 2) # 27
         x = F.relu(self.conv2(x)) # 25
         x = F.dropout(x, training=self.training)
@@ -94,7 +95,7 @@ class Net(nn.Module):
         x = F.max_pool2d(x, 2) # 5
         x = F.relu(self.conv4(x)) # 3
         x = F.max_pool2d(x, 3) # 1
-        x = x.view(-1, 1024)
+        x = x.view(-1, 4096)
         x = self.fc1(x)
         x = self.fc2(x)
         x = self.fc3(x)
