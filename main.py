@@ -14,8 +14,8 @@ from ImageNet import ImageNet
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Example')
-parser.add_argument('--batch-size', type=int, default=128, metavar='N',
-                    help='input batch size for training (default: 128)')
+parser.add_argument('--batch-size', type=int, default=256, metavar='N',
+                    help='input batch size for training (default: 256)')
 parser.add_argument('--test-batch-size', type=int, default=128, metavar='N',
                     help='input batch size for testing (default: 128)')
 parser.add_argument('--epochs', type=int, default=20, metavar='N',
