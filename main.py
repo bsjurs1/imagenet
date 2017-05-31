@@ -14,10 +14,10 @@ from ImageNet import ImageNet
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Example')
-parser.add_argument('--batch-size', type=int, default=16, metavar='N',
-                    help='input batch size for training (default: 16)')
-parser.add_argument('--test-batch-size', type=int, default=16, metavar='N',
-                    help='input batch size for testing (default: 16)')
+parser.add_argument('--batch-size', type=int, default=32, metavar='N',
+                    help='input batch size for training (default: 32)')
+parser.add_argument('--test-batch-size', type=int, default=32, metavar='N',
+                    help='input batch size for testing (default: 32)')
 parser.add_argument('--epochs', type=int, default=128, metavar='N',
                     help='number of epochs to train (default: 128)')
 parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
@@ -74,14 +74,14 @@ class Net(nn.Module):
     def __init__(self):
         """Initialize the CNN."""
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(3, 256, kernel_size=3)  # 54
-        self.conv2 = nn.Conv2d(256, 256, kernel_size=3)  # 52
-        self.conv3 = nn.Conv2d(256, 512, kernel_size=3)  # 19
-        self.conv4 = nn.Conv2d(512, 512, kernel_size=3)  # 17
-        self.conv5 = nn.Conv2d(512, 4096, kernel_size=3)  # 6
-        self.conv6 = nn.Conv2d(4096, 4096, kernel_size=3)  # 4
-        self.fc1 = nn.Linear(4096, 4096)
-        self.fc2 = nn.Linear(4096, 100)
+        self.conv1 = nn.Conv2d(3, 128, kernel_size=3)  # 54
+        self.conv2 = nn.Conv2d(128, 128, kernel_size=3)  # 52
+        self.conv3 = nn.Conv2d(128, 256, kernel_size=3)  # 19
+        self.conv4 = nn.Conv2d(256, 256, kernel_size=3)  # 17
+        self.conv5 = nn.Conv2d(256, 2048, kernel_size=3)  # 6
+        self.conv6 = nn.Conv2d(2048, 2048, kernel_size=3)  # 4
+        self.fc1 = nn.Linear(2048, 2048)
+        self.fc2 = nn.Linear(2048, 100)
 
 
     def forward(self, x):
@@ -99,7 +99,7 @@ class Net(nn.Module):
         x = F.relu(self.conv6(x))  # 4
         x = F.max_pool2d(x, 2) # 2
         x = F.max_pool2d(x, 2) # 1
-        x = x.view(-1, 4096)
+        x = x.view(-1, 2048)
         x = self.fc1(x)
         x = self.fc2(x)
         return F.log_softmax(x), F.softmax(x)
