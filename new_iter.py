@@ -99,7 +99,7 @@ class Net(nn.Module):
         x = F.max_pool2d(x, 2)  # 11
 
         x = F.relu(self.conv5(x))  # 9
-        x = F.dropout(x, training=self.training)
+        # x = F.dropout(x, training=self.training)
         x = F.relu(self.conv6(x))  # 7
 
         x = F.max_pool2d(x, 2)  # 3
