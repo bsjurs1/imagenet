@@ -84,7 +84,8 @@ class Net(nn.Module):
         self.conv8 = nn.Conv2d(64, 256, kernel_size=3)
         self.conv9 = nn.Conv2d(256, 256, kernel_size=3)
         self.fc1 = nn.Linear(1024, 1024)
-        self.fc2 = nn.Linear(1024, 100)
+        self.fc2 = nn.Linear(1024, 1024)
+        self.fc4 = nn.Linear(1024, 100)
 
     def forward(self, x):
         """Perform the classification."""
@@ -103,6 +104,7 @@ class Net(nn.Module):
         x = x.view(-1, 1024)
         x = self.fc1(x)
         x = self.fc2(x)
+        x = self.fc3(x)
 
         # x = F.relu(self.conv1(x)) # 54
         # x = F.dropout(x, training=self.training)
