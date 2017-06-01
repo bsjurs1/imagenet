@@ -86,8 +86,9 @@ class Net(nn.Module):
 
     def forward(self, x):
         """Perform the classification."""
-
+        print(x.size())
         x = F.relu(self.conv1(x))  # 54
+        x = F.dropout(x, training=self.training)
         x = F.relu(self.conv2(x))  # 52
         x = F.max_pool2d(x, 2) # 21
         x = F.relu(self.conv3(x))  # 19
