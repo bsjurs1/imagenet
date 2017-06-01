@@ -14,10 +14,10 @@ from ImageNet import ImageNet
 
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch ImageNet Example')
-parser.add_argument('--batch-size', type=int, default=16, metavar='N',
-                    help='input batch size for training (default: 16)')
-parser.add_argument('--test-batch-size', type=int, default=16, metavar='N',
-                    help='input batch size for testing (default: 16)')
+parser.add_argument('--batch-size', type=int, default=32, metavar='N',
+                    help='input batch size for training (default: 32)')
+parser.add_argument('--test-batch-size', type=int, default=32, metavar='N',
+                    help='input batch size for testing (default: 32)')
 parser.add_argument('--epochs', type=int, default=128, metavar='N',
                     help='number of epochs to train (default: 128)')
 parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
@@ -88,7 +88,7 @@ class Net(nn.Module):
         """Perform the classification."""
         print(x.size())
         x = F.relu(self.conv1(x))  # 54
-        x = F.dropout(x, training=self.training)
+        
         x = F.relu(self.conv2(x))  # 52
         x = F.max_pool2d(x, 2) # 21
         x = F.relu(self.conv3(x))  # 19
